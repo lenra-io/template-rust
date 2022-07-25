@@ -21,12 +21,12 @@ fn main() -> io::Result<()> {
 
 fn handle_json(json_value: Value) {
     // TODO: implement app
-    let ret: Value = if json_value["widget"].is_string() {
-        handle_widget(json_value["widget"].as_str().unwrap())
+    let ret: String = if json_value["widget"].is_string() {
+        handle_widget(json_value["widget"].as_str().unwrap()).to_string()
     } else {
         panic!("crash and burn")
     };
-    print!("{}", ret.to_string());
+    print!("{}", ret);
 }
 
 fn handle_widget(widget_name: &str) -> Value {
