@@ -2,22 +2,17 @@ componentsApi: "1.1"
 builders:
   - name: builder
     image: ekidd/rust-musl-builder
-    workdir: /app
     copySources: true
     user: rust
-    # rootScript:
-    #   - mkdir -p /home/rust/src/target
-    #   - chown -R rust:rust ./
     cache:
       - /usr/local/cargo/registry
-      - /app/target
+      # - /home/rust/src/target
     script:
-      - ls -al
       - cargo build --release
 image: scratch
 artifacts:
   - builder: builder
-    source: /app/target/x86_64-unknown-linux-musl/release/template-rust
+    source: /home/rust/src/target/x86_64-unknown-linux-musl/release/template-rust
     destination: /app
 watchdog:
   targetDir: /

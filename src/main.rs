@@ -1,6 +1,5 @@
-use serde_json::Value;
+use serde_json::{json, Value};
 use std::io::{self, BufRead};
-
 
 fn main() -> io::Result<()> {
     let mut buffer = String::new();
@@ -12,7 +11,7 @@ fn main() -> io::Result<()> {
             Ok(json_val) => {
                 handle_json(json_val);
                 break;
-            },
+            }
             Err(_) => {}
         };
         buffer.push_str("\n");
@@ -20,7 +19,19 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn handle_json(json_value:Value) {
-    println!("{}", json_value.to_string());
+fn handle_json(json_value: Value) {
     // TODO: implement app
+    let ret: Value = if json_value["widget"].is_string() {
+        handle_widget(json_value["widget"].as_str().unwrap())
+    } else {
+        panic!("crash and burn")
+    };
+    print!("{}", ret.to_string());
+}
+
+fn handle_widget(widget_name: &str) -> Value {
+    return json!({
+        "type": "text",
+        "value": format!("My app with the widget '{}'", widget_name)
+    });
 }
