@@ -9,6 +9,8 @@ fn main() -> io::Result<()> {
         let p: Result<Value, _> = serde_json::from_str(&buffer);
         match p {
             Ok(json_val) => {
+        let p: Result<Value, _> = serde_json::from_str(&buffer);
+                println!("{}", buffer);
                 handle_json(json_val);
                 break;
             }
