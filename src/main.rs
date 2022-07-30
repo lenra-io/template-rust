@@ -1,23 +1,8 @@
 use serde_json::{json, Value};
-use std::io::{self, BufRead};
+use std::io::Result;
 
-fn main() -> io::Result<()> {
-    let mut buffer = String::new();
-    let stdin = io::stdin();
-    for line in stdin.lock().lines() {
-        buffer.push_str(&line.unwrap());
-        let p: Result<Value, _> = serde_json::from_str(&buffer);
-        match p {
-            Ok(json_val) => {
-        let p: Result<Value, _> = serde_json::from_str(&buffer);
-                println!("{}", buffer);
-                handle_json(json_val);
-                break;
-            }
-            Err(_) => {}
-        };
-        buffer.push_str("\n");
-    }
+fn main() -> Result<()> {
+    handle_json(serde_json::from_reader(std::io::stdin().lock()).unwrap());
     Ok(())
 }
 
