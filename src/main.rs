@@ -1,24 +1,47 @@
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use std::io::Result;
 
-fn main() -> Result<()> {
-    handle_json(serde_json::from_reader(std::io::stdin().lock()).unwrap());
-    Ok(())
+fn main() {
+    let input: Input = serde_json::from_reader(std::io::stdin()).unwrap();
+
+    match input {
+        Input::Widget(widget) => handle_widget(widget),
+        Input::Listener(_) => todo!(),
+    }
 }
 
-fn handle_json(json_value: Value) {
-    // TODO: implement app
-    let ret: String = if json_value["widget"].is_string() {
-        handle_widget(json_value["widget"].as_str().unwrap()).to_string()
-    } else {
-        panic!("crash and burn")
-    };
-    print!("{}", ret);
+/** The application input */
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum Input {
+    Listener(Listener),
+    Widget(Widget),
 }
 
-fn handle_widget(widget_name: &str) -> Value {
-    return json!({
-        "type": "text",
-        "value": format!("My app with the widget '{}'", widget_name)
-    });
+/** The Dofigen configuration */
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+pub struct Listener {
+    pub action: String,
+    pub props: Value,
+    pub event: Value,
+    pub api: Value,
+}
+
+/** The Dofigen configuration */
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+pub struct Widget {
+    pub widget: String,
+    pub data: Value,
+    pub props: Value,
+    pub context: Value,
+}
+
+fn handle_widget(widget: Widget) {
+    print!(
+        "{}",
+        json!({
+            "type": "text",
+            "value": format!("My app with the widget '{}'", widget.widget)
+        })
+    );
 }
