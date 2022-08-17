@@ -1,5 +1,6 @@
 {
     "widget": "main",
     "data": {},
-    "props": {}
+    "props": {},
+    "context": {}
 }

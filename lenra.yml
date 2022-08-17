@@ -3,20 +3,21 @@ generator:
   dofigen:
     builders:
     - name: builder
-      image: ekidd/rust-musl-builder
+      image: rust
       adds:
       - "."
-      root:
-        script:
-        # Build with musl to work with scratch
-        - cargo build --release --target=x86_64-unknown-linux-musl
-        # copy the generated binary outside of the target directory. If not the other stages won't be able to find it since it's in a cache volume
-        - mv target/x86_64-unknown-linux-musl/release/app /home/rust/
-        caches:
-        # Cargo cache
-        - /home/rust/.cargo
-        # build cache
-        - /home/rust/src/target
+      script:
+      # Add the target
+      - rustup target add x86_64-unknown-linux-musl
+      # Build with musl to work with scratch
+      - cargo build --release --target=x86_64-unknown-linux-musl
+      # copy the generated binary outside of the target directory. If not the other stages won't be able to find it since it's in a cache volume
+      - mv target/x86_64-unknown-linux-musl/release/app /home/rust/
+      caches:
+      # Cargo cache
+      - /home/rust/.cargo
+      # build cache
+      - /home/rust/src/target
     image: scratch
     artifacts:
     - builder: builder
