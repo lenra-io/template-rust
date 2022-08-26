@@ -6,6 +6,8 @@ generator:
       image: rust
       adds:
       - "."
+      envs:
+        RUSTFLAGS: -Clinker=musl-gcc
       script:
       # Add the target
       - rustup target add x86_64-unknown-linux-musl

@@ -1,6 +1,5 @@
-{
-    "widget": "main",
-    "data": {},
-    "props": {},
-    "context": {}
-}
+{"widget": "root"}
+
+{"widget": "counter", "data": [{"_id":0, "_datastore": "user", "count":0}]}
+
+{"action":"increment","props":{"datastore":"user","id":0}, "api": {"url": "https://www.lenra.io/", "token": "test"}}
