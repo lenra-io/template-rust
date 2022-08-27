@@ -70,6 +70,27 @@ pub struct Padding {
     pub right: u16,
 }
 
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct Decoration {
+    pub color: Option<u32>,
+    pub box_shadow: Option<BoxShadow>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct BoxShadow {
+    pub blur_radius: Option<u16>,
+    pub color: Option<u32>,
+    pub offset: Option<Offset>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+pub struct Offset {
+    dx: u16,
+    dy: u16,
+}
+
 fn loading() -> Value {
     json!({
         "type": "text",
@@ -100,16 +121,16 @@ fn root() -> Value {
 fn menu() -> Value {
     json!({
         "type": "container",
-        "decoration": {
-            "color": "FFFFFFFF",
-            "boxShadow": {
-                "blurRadius": 8,
-                "color": "1A000000",
-                "offset": {
-                    "dx": 0,
-                    "dy": 1
-                }
-            },
+        "decoration": Decoration {
+            color: Some(0xFFFFFFFF),
+            box_shadow: Some(BoxShadow {
+                blur_radius: Some(8),
+                color: Some(0x1A000000),
+                offset: Some(Offset{
+                    dx: 0,
+                    dy: 1
+                })
+            }),
         },
         "child": {
             "type": "flex",

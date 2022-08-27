@@ -14,17 +14,22 @@ mod data;
 mod listeners;
 mod widgets;
 
-#[tokio::main]
-async fn main() {
+fn main() {
     init_log();
 
     let body = serde_json::from_reader(std::io::stdin());
     if let Ok(request) = body {
         match request {
             Request::Widget(widget) => print!("{}", widget.handle()),
-            Request::NotManagedListener(l) => panic!("Unknown listener {}", l.action),
-            Request::Listener(listener) => listener.handle().await,
-            Request::NotManagedWidget(w) => panic!("Unknown widget {}", w.widget),
+            Request::Listener(listener) => listener.handle(),
+            Request::NotManagedWidget(w) => {
+                log::error!("Not managed widget '{}'", w.widget);
+                panic!("Unknown widget {}", w.widget)
+            },
+            Request::NotManagedListener(l) => {
+                log::warn!("Not managed action '{}'", l.action);
+                panic!("Unknown action {}", l.action)
+            },
             Request::Other(_) => print!("{}", handle_manifest()),
         }
     } else {
