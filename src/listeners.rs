@@ -1,9 +1,10 @@
 // use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 use crate::data::{service::Api, Counter};
 
+const USER_DATASTORE: &str = "_user";
 const COUNTER_DATASTORE: &str = "counter";
 const DATASTORES: [&str; 1] = [COUNTER_DATASTORE];
 
@@ -21,6 +22,7 @@ pub struct UnknownListener {
 #[serde(tag = "action", rename_all = "camelCase")]
 pub enum Listener {
     OnEnvStart(BaseListener),
+    OnUserFirstJoin(BaseListener),
     Increment(Increment),
 }
 
@@ -29,6 +31,7 @@ impl Listener {
         match self {
             Listener::Increment(inc) => inc.handle(), /* .await */
             Listener::OnEnvStart(listener) => create_datastores(&listener.api),
+            Listener::OnUserFirstJoin(listener) => create_user_counter(&listener.api),
         }
     }
 }
@@ -68,7 +71,7 @@ impl ListenerHandler for Increment {
             .api
             .get_data(self.props.datastore.clone(), self.props.id)
             .unwrap();
-        counter.count = counter.count + 1;
+        counter.count = Some(counter.count.unwrap() + 1);
         self.api.update_data(counter).unwrap();
     }
 }
@@ -79,8 +82,25 @@ fn create_datastores(api: &Api) {
             .expect(format!("Failed creating datastore {}", datastore).as_str())
     });
     api.create_data(Counter {
-        _id: None,
-        _datastore: COUNTER_DATASTORE.into(),
-        count: 0,
-    }).unwrap();
+        id: None,
+        datastore: Some(COUNTER_DATASTORE.into()),
+        count: Some(0),
+    })
+    .unwrap();
+}
+
+fn create_user_counter(api: &Api) {
+    let mut user: Counter = api
+        .execute_query(json!({
+            "$find": {
+                "_datastore": USER_DATASTORE,
+                "_id": "@me"
+            }
+        }))
+        .unwrap();
+    if user.count.is_none() {
+        user.count = Some(0);
+        user.datastore = Some(USER_DATASTORE.into());
+        api.update_data(user).unwrap();
+    }
 }

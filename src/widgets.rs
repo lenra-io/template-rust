@@ -31,7 +31,9 @@ impl Widget {
             Widget::Counter(counter_widget) => {
                 let counter_option = counter_widget.data.get(0);
                 if let Some(c) = counter_option {
-                    return counter(c, counter_widget.props.text.clone());
+                    if c.count.is_some() {
+                        return counter(c, counter_widget.props.text.clone());
+                    }
                 }
 
                 loading()
@@ -185,7 +187,7 @@ fn counter(data: &Counter, text: String) -> Value {
       "children": [
         {
           "type": "text",
-          "value": format!("{}: {}", text, data.count)
+          "value": format!("{}: {}", text, data.count.unwrap())
         },
         {
           "type": "button",

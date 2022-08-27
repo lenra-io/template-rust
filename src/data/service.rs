@@ -1,7 +1,7 @@
 use serde_json::json;
 // use reqwest::Error;
-use ureq::Error;
 use serde::{de, Deserialize, Serialize};
+use ureq::Error;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 pub struct Api {
@@ -26,10 +26,11 @@ impl Api {
     }
 
     pub fn create_data<T: Data>(&self, data: T) -> Result<T, Error> {
+        log::info!("create_data {}", serde_json::to_string(&data).unwrap());
         let request_url = format!(
             "{url}/app/datastores/{datastore}/data",
             url = self.url,
-            datastore = data.datastore()
+            datastore = data.datastore().unwrap()
         );
 
         let res = ureq::post(request_url.as_str())
@@ -41,10 +42,11 @@ impl Api {
     }
 
     pub fn update_data<T: Data>(&self, data: T) -> Result<T, Error> {
+        log::info!("update_data {}", serde_json::to_string(&data).unwrap());
         let request_url = format!(
             "{url}/app/datastores/{datastore}/data/{id}",
             url = self.url,
-            datastore = data.datastore(),
+            datastore = data.datastore().unwrap(),
             id = data.id().unwrap()
         );
 
@@ -60,7 +62,7 @@ impl Api {
         let request_url = format!(
             "{url}/app/datastores/{datastore}/data/{id}",
             url = self.url,
-            datastore = data.datastore(),
+            datastore = data.datastore().unwrap(),
             id = data.id().unwrap()
         );
 
@@ -71,11 +73,8 @@ impl Api {
         Ok(())
     }
 
-    pub(crate) fn create_datastore(&self, datastore: &str) -> Result<(), Error> {
-        let request_url = format!(
-            "{url}/app/datastores",
-            url = self.url
-        );
+    pub fn create_datastore(&self, datastore: &str) -> Result<(), Error> {
+        let request_url = format!("{url}/app/datastores", url = self.url);
 
         ureq::post(request_url.as_str())
             .set("Authorization", format!("Bearer {}", self.token).as_str())
@@ -84,9 +83,20 @@ impl Api {
 
         Ok(())
     }
+
+    pub fn execute_query<T: Data, Q: Serialize>(&self, query: Q) -> Result<T, Error> {
+        let request_url = format!("{url}/app/query", url = self.url);
+
+        let res = ureq::post(request_url.as_str())
+            .set("Authorization", format!("Bearer {}", self.token).as_str())
+            .send_json(query)?
+            .into_json()?;
+
+        Ok(res)
+    }
 }
 
-pub trait Data: de::DeserializeOwned + Serialize {
+pub trait Data: Sized + de::DeserializeOwned + Serialize {
     fn id(&self) -> Option<u32>;
-    fn datastore(&self) -> String;
+    fn datastore(&self) -> Option<String>;
 }

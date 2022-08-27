@@ -7,17 +7,23 @@ pub mod service;
 /** Counter data */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 pub struct Counter {
-    pub _id: Option<u32>,
-    pub _datastore: String,
-    pub count: u32,
+    #[serde(rename = "_id")]
+    pub id: Option<u32>,
+    #[serde(rename = "_datastore")]
+    pub datastore: Option<String>,
+    pub count: Option<u32>,
 }
 
 impl Data for Counter {
     fn id(&self) -> Option<u32> {
-        self._id
+        self.id
     }
 
-    fn datastore(&self) -> String {
-        self._datastore.clone()
+    fn datastore(&self) -> Option<String> {
+        let ref this = self.datastore;
+        match this {
+            Some(x) => Some(x.clone()),
+            None => None,
+        }
     }
 }
