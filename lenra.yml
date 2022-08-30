@@ -4,26 +4,41 @@ generator:
     builders:
     - name: builder
       image: rust
+      workdir: /app
+      envs:
+        CARGO_HOME: /root/.cargo
       adds:
       - "."
       script:
+      - mkdir -p $CARGO_HOME
       - cargo build --release
       # copy the generated binary outside of the target directory. If not the other stages won't be able to find it since it's in a cache volume
       - mv target/release/app /tmp/
       caches:
       # Cargo cache
-      - /home/rust/.cargo
+      - /root/.cargo
       # build cache
-      - /home/rust/src/target
+      - /app/target
     image: debian:stable-slim
     workdir: /app
     artifacts:
     - builder: builder
       source: "/tmp/app"
       destination: "/app/"
+    - builder: builder
+      source: "/app/log4rs.yml"
+      destination: "/app/"
+    root:
+      script:
+      - mkdir -p log
+      - touch log/output.log
+      - chown -R 1000:1000 .
     cmd:
     - /app/app
     ignores:
     - "**"
     - "!/src"
     - "!/Cargo.*"
+    - "!/log4rs.yml"
+dev:
+  devtoolTag: local

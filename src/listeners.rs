@@ -28,6 +28,7 @@ pub enum Listener {
 
 impl Listener {
     pub fn handle(&self) {
+        log::debug!("Listener: {:?}", self);
         match self {
             Listener::Increment(inc) => inc.handle(), /* .await */
             Listener::OnEnvStart(listener) => create_datastores(&listener.api),
@@ -79,7 +80,8 @@ impl ListenerHandler for Increment {
 fn create_datastores(api: &Api) {
     DATASTORES.iter().for_each(|&datastore| {
         api.create_datastore(datastore)
-            .expect(format!("Failed creating datastore {}", datastore).as_str())
+            .unwrap_or(())
+            // .expect(format!("Failed creating datastore {}", datastore).as_str())
     });
     api.create_data(Counter {
         id: None,
@@ -90,7 +92,7 @@ fn create_datastores(api: &Api) {
 }
 
 fn create_user_counter(api: &Api) {
-    let mut user: Counter = api
+    let users: Vec<Counter> = api
         .execute_query(json!({
             "$find": {
                 "_datastore": USER_DATASTORE,
@@ -98,6 +100,7 @@ fn create_user_counter(api: &Api) {
             }
         }))
         .unwrap();
+    let mut user = users[0].clone();
     if user.count.is_none() {
         user.count = Some(0);
         user.datastore = Some(USER_DATASTORE.into());

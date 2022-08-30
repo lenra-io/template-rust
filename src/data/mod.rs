@@ -5,7 +5,7 @@ use self::service::Data;
 pub mod service;
 
 /** Counter data */
-#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default, Clone)]
 pub struct Counter {
     #[serde(rename = "_id")]
     pub id: Option<u32>,

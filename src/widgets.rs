@@ -14,7 +14,7 @@ pub struct UnknownWidget {
 
 /** Lenra widget request */
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(tag = "widget", rename_all = "kebab-case")]
+#[serde(tag = "widget", rename_all = "camelCase")]
 pub enum Widget {
     Root(BaseWidget),
     Menu(BaseWidget),
@@ -24,7 +24,8 @@ pub enum Widget {
 
 impl Widget {
     pub fn handle(&self) -> Value {
-        match self {
+        log::debug!("Widget: {:?}", self);
+        let ret = match self {
             Widget::Root(_) => root(),
             Widget::Menu(_) => menu(),
             Widget::Counters(_) => counters(),
@@ -38,7 +39,9 @@ impl Widget {
 
                 loading()
             }
-        }
+        };
+        log::debug!("Return: {}", ret);
+        ret
     }
 }
 
