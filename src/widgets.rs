@@ -172,7 +172,7 @@ fn counters() -> Value {
           "name": "counter",
           "query": {
             "$find": {
-              "_datastore": "common_counter",
+              "_datastore": "counter",
             }
           },
           "props": CounterWidgetProps { text: "The common counter".into() }

@@ -79,9 +79,8 @@ impl ListenerHandler for Increment {
 
 fn create_datastores(api: &Api) {
     DATASTORES.iter().for_each(|&datastore| {
-        api.create_datastore(datastore)
-            .unwrap_or(())
-            // .expect(format!("Failed creating datastore {}", datastore).as_str())
+        api.create_datastore(datastore).unwrap_or(())
+        // .expect(format!("Failed creating datastore {}", datastore).as_str())
     });
     api.create_data(Counter {
         id: None,
@@ -100,10 +99,14 @@ fn create_user_counter(api: &Api) {
             }
         }))
         .unwrap();
-    let mut user = users[0].clone();
-    if user.count.is_none() {
-        user.count = Some(0);
-        user.datastore = Some(USER_DATASTORE.into());
-        api.update_data(user).unwrap();
+    if users.len() > 0 {
+        let mut user = users[0].clone();
+        if user.count.is_none() {
+            user.count = Some(0);
+            user.datastore = Some(USER_DATASTORE.into());
+            api.update_data(user).unwrap();
+        }
+    } else {
+        log::warn!("User data not created yet");
     }
 }
