@@ -4,8 +4,8 @@ use serde_json::{json, Value};
 
 use crate::data::{service::Api, Counter};
 
-const USER_DATASTORE: &str = "_user";
-const COUNTER_DATASTORE: &str = "counter";
+pub const USER_DATASTORE: &str = "_users";
+pub const COUNTER_DATASTORE: &str = "counter";
 const DATASTORES: [&str; 1] = [COUNTER_DATASTORE];
 
 /** Lenra listener request */
@@ -72,7 +72,7 @@ impl ListenerHandler for Increment {
             .api
             .get_data(self.props.datastore.clone(), self.props.id)
             .unwrap();
-        counter.count = Some(counter.count.unwrap() + 1);
+        counter.count = Some(counter.count.unwrap_or(0) + 1);
         self.api.update_data(counter).unwrap();
     }
 }

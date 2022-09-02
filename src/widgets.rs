@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::data::{service::Data, Counter};
+use crate::{data::{service::Data, Counter}, listeners::{USER_DATASTORE, COUNTER_DATASTORE}};
 
 /** Unknown widget request */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -161,7 +161,7 @@ fn counters() -> Value {
           "name": "counter",
           "query": {
             "$find": {
-              "_datastore": "user",
+              "_datastore": USER_DATASTORE,
               "_id": "@me"
             }
           },
@@ -172,7 +172,7 @@ fn counters() -> Value {
           "name": "counter",
           "query": {
             "$find": {
-              "_datastore": "counter",
+              "_datastore": COUNTER_DATASTORE,
             }
           },
           "props": CounterWidgetProps { text: "The common counter".into() }
@@ -190,7 +190,7 @@ fn counter(data: &Counter, text: String) -> Value {
       "children": [
         {
           "type": "text",
-          "value": format!("{}: {}", text, data.count.unwrap())
+          "value": format!("{}: {}", text, data.count.unwrap_or(0))
         },
         {
           "type": "button",
