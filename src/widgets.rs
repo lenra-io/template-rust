@@ -18,7 +18,7 @@ pub struct UnknownWidget {
 pub enum Widget {
     Root(BaseWidget),
     Menu(BaseWidget),
-    Counters(BaseWidget),
+    Home(BaseWidget),
     Counter(CounterWidget),
 }
 
@@ -28,7 +28,7 @@ impl Widget {
         let ret = match self {
             Widget::Root(_) => root(),
             Widget::Menu(_) => menu(),
-            Widget::Counters(_) => counters(),
+            Widget::Home(_) => home(),
             Widget::Counter(counter_widget) => {
                 let counter_option = counter_widget.data.get(0);
                 if let Some(c) = counter_option {
@@ -117,7 +117,7 @@ fn root() -> Value {
         },
         {
           "type": "widget",
-          "name": "counters"
+          "name": "home"
         }
       ]
     })
@@ -148,7 +148,7 @@ fn menu() -> Value {
     })
 }
 
-fn counters() -> Value {
+fn home() -> Value {
     json!({
       "type": "flex",
       "direction": "vertical",
@@ -156,6 +156,10 @@ fn counters() -> Value {
       "mainAxisAlignment": "spaceEvenly",
       "crossAxisAlignment": "center",
       "children": [
+        {
+          "type": "image",
+          "src": "logo-vertical.png"
+        },
         {
           "type": "widget",
           "name": "counter",

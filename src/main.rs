@@ -1,4 +1,5 @@
 use listeners::{Listener, UnknownListener};
+use resources::Resource;
 // use log::LevelFilter;
 // use log4rs::{
 //     append::file::FileAppender,
@@ -13,6 +14,7 @@ use widgets::{UnknownWidget, Widget};
 mod data;
 mod listeners;
 mod widgets;
+mod resources;
 
 fn main() {
     init_log();
@@ -30,6 +32,7 @@ fn main() {
                 log::warn!("Not managed action '{}'", l.action);
                 panic!("Unknown action {}", l.action)
             },
+            Request::Resource(resource) => resource.handle(),
             Request::Other(_) => print!("{}", handle_manifest()),
         }
     } else {
@@ -59,6 +62,7 @@ pub enum Request {
     NotManagedListener(UnknownListener),
     Widget(Widget),
     NotManagedWidget(UnknownWidget),
+    Resource(Resource),
     Other(Value),
 }
 
