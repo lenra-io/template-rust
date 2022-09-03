@@ -20,25 +20,18 @@ generator:
       # build cache
       - /app/target
     image: debian:stable-slim
+    envs:
+      RUST_LOG: debug
     workdir: /app
     artifacts:
     - builder: builder
       source: "/tmp/app"
       destination: "/app/"
-    - builder: builder
-      source: "/app/log4rs.yml"
-      destination: "/app/"
-    root:
-      script:
-      - mkdir -p log
-      - touch log/output.log
-      - chown -R 1000:1000 .
     cmd:
     - /app/app
     ignores:
     - "**"
     - "!/src"
     - "!/Cargo.*"
-    - "!/log4rs.yml"
 dev:
   devtoolTag: local

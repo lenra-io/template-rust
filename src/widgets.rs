@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-use crate::{data::{service::Data, Counter}, listeners::{USER_DATASTORE, COUNTER_DATASTORE}};
+use crate::{
+    data::{service::Data, Counter},
+    listeners::{COUNTER_DATASTORE, USER_DATASTORE},
+};
 
 /** Unknown widget request */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -9,7 +12,7 @@ pub struct UnknownWidget {
     pub widget: String,
     pub data: Option<Value>,
     pub props: Option<Value>,
-    pub context: Option<Value>,
+    pub context: Option<Context>,
 }
 
 /** Lenra widget request */
@@ -50,7 +53,19 @@ impl Widget {
 pub struct BaseWidget {
     pub data: Option<Value>,
     pub props: Option<Value>,
-    pub context: Option<Value>,
+    pub context: Option<Context>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct Context {
+  pub screen_size: Option<ScreenSize>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
+pub struct ScreenSize {
+  pub width: Option<u16>,
+  pub height: Option<u16>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -58,7 +73,7 @@ pub struct BaseWidget {
 pub struct CounterWidget {
     pub data: Vec<Counter>,
     pub props: CounterWidgetProps,
-    pub context: Option<Value>,
+    pub context: Option<Context>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -113,7 +128,7 @@ fn root() -> Value {
       "children": [
         {
           "type": "widget",
-          "name": "menu"
+          "name": "menu",
         },
         {
           "type": "widget",
@@ -124,6 +139,43 @@ fn root() -> Value {
 }
 
 fn menu() -> Value {
+    let menu_content = json!({
+      "type": "flex",
+      "fillParent": true,
+      "mainAxisAlignment": "spaceBetween",
+      "crossAxisAlignment": "center",
+      "padding": Padding { right: 4, ..Default::default() },
+      "children": [
+          {
+            "type": "container",
+            "constraints": {
+              "minWidth": 32,
+              "minHeight": 32,
+              "maxWidth": 32,
+              "maxHeight": 32,
+            },
+            "child": {
+              "type": "image",
+              "src": "logo.png"
+            },
+          },
+          {
+            "type": "flexible",
+            "child": {
+              "type": "container",
+              "child": {
+                "type": "text",
+                "value": "Hello World",
+                "textAlign": "center",
+                "style": {
+                  "fontWeight": "bold",
+                  "fontSize": 24,
+                },
+              }
+            }
+          }
+      ]
+  });
     json!({
         "type": "container",
         "decoration": Decoration {
@@ -137,14 +189,8 @@ fn menu() -> Value {
                 })
             }),
         },
-        "child": {
-            "type": "flex",
-            "fillParent": true,
-            "mainAxisAlignment": "spaceBetween",
-            "crossAxisAlignment": "center",
-            "padding": padding_symmetric(4, 2),
-            "children": []
-        }
+        "padding": padding_symmetric(2, 4),
+        "child": menu_content,
     })
 }
 
@@ -156,10 +202,6 @@ fn home() -> Value {
       "mainAxisAlignment": "spaceEvenly",
       "crossAxisAlignment": "center",
       "children": [
-        {
-          "type": "image",
-          "src": "logo-vertical.png"
-        },
         {
           "type": "widget",
           "name": "counter",
