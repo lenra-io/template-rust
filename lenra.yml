@@ -33,5 +33,3 @@ generator:
     - "**"
     - "!/src"
     - "!/Cargo.*"
-dev:
-  devtoolTag: local
