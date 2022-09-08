@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use self::service::Data;
+use self::service::Doc;
 
 pub mod service;
 
@@ -8,20 +8,14 @@ pub mod service;
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default, Clone)]
 pub struct Counter {
     #[serde(rename = "_id")]
-    pub id: Option<u32>,
-    #[serde(rename = "_datastore")]
-    pub datastore: Option<String>,
-    pub count: Option<u32>,
+    pub id: Option<String>,
+    pub count: u32,
+    pub user: String,
 }
 
-impl Data for Counter {
-    fn id(&self) -> Option<u32> {
-        self.id
-    }
-
-    fn datastore(&self) -> Option<String> {
-        let ref this = self.datastore;
-        match this {
+impl Doc for Counter {
+    fn id(&self) -> Option<String> {
+        match &self.id {
             Some(x) => Some(x.clone()),
             None => None,
         }

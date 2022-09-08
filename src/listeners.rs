@@ -1,12 +1,12 @@
 // use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::Value;
 
 use crate::data::{service::Api, Counter};
 
-pub const USER_DATASTORE: &str = "_users";
-pub const COUNTER_DATASTORE: &str = "counter";
-const DATASTORES: [&str; 1] = [COUNTER_DATASTORE];
+pub const COUNTER_COLLECTION: &str = "counter";
+pub const GLOBAL_USER: &str = "global";
+pub const CURRENT_USER: &str = "@me";
 
 /** Lenra listener request */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -31,8 +31,8 @@ impl Listener {
         log::debug!("Listener: {:?}", self);
         match self {
             Listener::Increment(inc) => inc.handle(), /* .await */
-            Listener::OnEnvStart(listener) => create_datastores(&listener.api),
-            Listener::OnUserFirstJoin(listener) => create_user_counter(&listener.api),
+            Listener::OnEnvStart(listener) => create_counter(&listener.api, GLOBAL_USER),
+            Listener::OnUserFirstJoin(listener) => create_counter(&listener.api, CURRENT_USER),
         }
     }
 }
@@ -70,43 +70,23 @@ impl ListenerHandler for Increment {
     fn handle(&self) {
         let mut counter: Counter = self
             .api
-            .get_data(self.props.datastore.clone(), self.props.id)
+            .get_doc(COUNTER_COLLECTION, self.props.id)
             .unwrap();
-        counter.count = Some(counter.count.unwrap_or(0) + 1);
-        self.api.update_data(counter).unwrap();
+        counter.count = counter.count + 1;
+        self.api.update_doc(COUNTER_COLLECTION, counter).unwrap();
     }
 }
 
-fn create_datastores(api: &Api) {
-    DATASTORES.iter().for_each(|&datastore| {
-        api.create_datastore(datastore).unwrap_or(())
-        // .expect(format!("Failed creating datastore {}", datastore).as_str())
-    });
-    api.create_data(Counter {
-        id: None,
-        datastore: Some(COUNTER_DATASTORE.into()),
-        count: Some(0),
-    })
-    .unwrap();
-}
-
-fn create_user_counter(api: &Api) {
-    let users: Vec<Counter> = api
-        .execute_query(json!({
-            "$find": {
-                "_datastore": USER_DATASTORE,
-                "_id": "@me"
-            }
-        }))
-        .unwrap();
-    if users.len() > 0 {
-        let mut user = users[0].clone();
-        if user.count.is_none() {
-            user.count = Some(0);
-            user.datastore = Some(USER_DATASTORE.into());
-            api.update_data(user).unwrap();
-        }
-    } else {
-        log::warn!("User data not created yet");
+fn create_counter(api: &Api, user: &str) {
+    let res = api.create_doc(
+        COUNTER_COLLECTION,
+        Counter {
+            id: None,
+            count: 0,
+            user: user.into(),
+        },
+    );
+    if let Err(error) = res {
+        log::warn!("Error occured while creating the counter: {}", error);
     }
 }
