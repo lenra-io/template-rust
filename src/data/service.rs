@@ -1,4 +1,5 @@
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde_json::Value;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 pub struct Api {
@@ -7,7 +8,7 @@ pub struct Api {
 }
 
 impl Api {
-    pub fn get_doc<T: Doc>(&self, coll: &str, id: u32) -> Result<T, Box<dyn std::error::Error>> {
+    pub fn get_doc<T: Doc>(&self, coll: &str, id: &str) -> Result<T, Box<dyn std::error::Error>> {
         log::debug!("get_doc {}[{}]", coll, id);
         let request_url = format!("{url}/app/colls/{coll}/docs/{id}", url = self.url, id = id);
 
@@ -18,11 +19,7 @@ impl Api {
             .map_err(|e| e.into())
     }
 
-    pub fn create_doc<T: Doc>(
-        &self,
-        coll: &str,
-        doc: T,
-    ) -> Result<T, Box<dyn std::error::Error>> {
+    pub fn create_doc<T: Doc>(&self, coll: &str, doc: T) -> Result<T, Box<dyn std::error::Error>> {
         log::debug!("create_doc {}", serde_json::to_string(&doc).unwrap());
 
         let request_url = format!("{url}/app/colls/{coll}/docs", url = self.url);
@@ -34,11 +31,7 @@ impl Api {
             .map_err(|e| e.into())
     }
 
-    pub fn update_doc<T: Doc>(
-        &self,
-        coll: &str,
-        doc: T,
-    ) -> Result<T, Box<dyn std::error::Error>> {
+    pub fn update_doc<T: Doc>(&self, coll: &str, doc: T) -> Result<T, Box<dyn std::error::Error>> {
         log::debug!("update_doc {}", serde_json::to_string(&doc).unwrap());
 
         let request_url = format!(
@@ -54,11 +47,7 @@ impl Api {
             .map_err(|e| e.into())
     }
 
-    pub fn delete_doc<T: Doc>(
-        &self,
-        coll: &str,
-        doc: T,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn delete_doc<T: Doc>(&self, coll: &str, doc: T) -> Result<(), Box<dyn std::error::Error>> {
         let request_url = format!(
             "{url}/app/colls/{coll}/docs/{id}",
             url = self.url,
@@ -90,4 +79,10 @@ impl Api {
 
 pub trait Doc: Sized + DeserializeOwned + Serialize + 'static + Clone {
     fn id(&self) -> Option<String>;
+}
+
+impl Doc for Value {
+    fn id(&self) -> Option<String> {
+        None
+    }
 }

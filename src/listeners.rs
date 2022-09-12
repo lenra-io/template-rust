@@ -1,6 +1,6 @@
 // use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{Value, json};
 
 use crate::data::{service::Api, Counter};
 
@@ -30,7 +30,7 @@ impl Listener {
     pub fn handle(&self) {
         log::debug!("Listener: {:?}", self);
         match self {
-            Listener::Increment(inc) => inc.handle(), /* .await */
+            Listener::Increment(inc) => inc.handle(),
             Listener::OnEnvStart(listener) => create_counter(&listener.api, GLOBAL_USER),
             Listener::OnUserFirstJoin(listener) => create_counter(&listener.api, CURRENT_USER),
         }
@@ -60,8 +60,7 @@ pub struct Increment {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 pub struct IncrementProps {
-    id: u32,
-    datastore: String,
+    id: String,
 }
 
 // #[async_trait]
@@ -70,7 +69,7 @@ impl ListenerHandler for Increment {
     fn handle(&self) {
         let mut counter: Counter = self
             .api
-            .get_doc(COUNTER_COLLECTION, self.props.id)
+            .get_doc(COUNTER_COLLECTION, self.props.id.as_str())
             .unwrap();
         counter.count = counter.count + 1;
         self.api.update_doc(COUNTER_COLLECTION, counter).unwrap();
@@ -80,11 +79,10 @@ impl ListenerHandler for Increment {
 fn create_counter(api: &Api, user: &str) {
     let res = api.create_doc(
         COUNTER_COLLECTION,
-        Counter {
-            id: None,
-            count: 0,
-            user: user.into(),
-        },
+        json!({
+            "count": 0,
+            "user": user,
+        }),
     );
     if let Err(error) = res {
         log::warn!("Error occured while creating the counter: {}", error);
