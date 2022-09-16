@@ -33,5 +33,3 @@ generator:
     - "**"
     - "!/src"
     - "!/Cargo.*"
-dev:
-  devtoolTag: 1.0.0-mongo.2
