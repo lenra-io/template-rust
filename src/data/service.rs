@@ -67,7 +67,7 @@ impl Api {
         query: Q,
     ) -> Result<Vec<T>, Box<dyn std::error::Error>> {
         log::debug!("execute_query {}", serde_json::to_string(&query).unwrap());
-        let request_url = format!("{url}/app/colls/${coll}/docs/filter", url = self.url);
+        let request_url = format!("{url}/app/colls/${coll}/docs/find", url = self.url);
 
         ureq::post(request_url.as_str())
             .set("Authorization", format!("Bearer {}", self.token).as_str())
