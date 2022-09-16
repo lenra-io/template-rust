@@ -22,7 +22,7 @@ fn main() {
                 panic!("Unknown widget {}", w.widget)
             }
             Request::NotManagedListener(l) => {
-                log::warn!("Not managed action '{}'", l.action);
+                log::warn!("Not managed listener '{:?}'", l);
                 panic!("Unknown action {}", l.action)
             }
             Request::Resource(resource) => resource.handle(),

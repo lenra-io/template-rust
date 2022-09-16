@@ -19,7 +19,7 @@ generator:
       - /root/.cargo
       # build cache
       - /app/target
-    image: debian:stable-slim
+    image: bitnami/minideb
     envs:
       RUST_LOG: debug
     workdir: /app
