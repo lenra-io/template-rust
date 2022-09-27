@@ -24,9 +24,9 @@
     This template provides just enough to get started with your Rust application.
     <br />
     <br />
-    <a href="https://github.com/lenra-io/app-minella/issues">Report Bug</a>
+    <a href="https://github.com/lenra-io/template-rust/issues">Report Bug</a>
     ·
-    <a href="https://github.com/lenra-io/app-minella/issues">Request Feature</a>
+    <a href="https://github.com/lenra-io/template-rust/issues">Request Feature</a>
   </p>
 </div>
 
@@ -89,20 +89,20 @@ Distributed under the **MIT** License. See [LICENSE](./LICENSE) for more informa
 
 Lenra - [@lenra_dev](https://twitter.com/lenra_dev) - contact@lenra.io
 
-Project Link: [https://github.com/lenra-io/app-troy](https://github.com/lenra-io/app-troy)
+Project Link: [https://github.com/lenra-io/template-rust](https://github.com/lenra-io/template-rust)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/lenra-io/app-troy.svg?style=for-the-badge
-[contributors-url]: https://github.com/lenra-io/app-troy/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/lenra-io/app-troy.svg?style=for-the-badge
-[forks-url]: https://github.com/lenra-io/app-troy/network/members
-[stars-shield]: https://img.shields.io/github/stars/lenra-io/app-troy.svg?style=for-the-badge
-[stars-url]: https://github.com/lenra-io/app-troy/stargazers
-[issues-shield]: https://img.shields.io/github/issues/lenra-io/app-troy.svg?style=for-the-badge
-[issues-url]: https://github.com/lenra-io/app-troy/issues
-[license-shield]: https://img.shields.io/github/license/lenra-io/app-troy.svg?style=for-the-badge
-[license-url]: https://github.com/lenra-io/app-troy/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/lenra-io/template-rust.svg?style=for-the-badge
+[contributors-url]: https://github.com/lenra-io/template-rust/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/lenra-io/template-rust.svg?style=for-the-badge
+[forks-url]: https://github.com/lenra-io/template-rust/network/members
+[stars-shield]: https://img.shields.io/github/stars/lenra-io/template-rust.svg?style=for-the-badge
+[stars-url]: https://github.com/lenra-io/template-rust/stargazers
+[issues-shield]: https://img.shields.io/github/issues/lenra-io/template-rust.svg?style=for-the-badge
+[issues-url]: https://github.com/lenra-io/template-rust/issues
+[license-shield]: https://img.shields.io/github/license/lenra-io/template-rust.svg?style=for-the-badge
+[license-url]: https://github.com/lenra-io/template-rust/blob/master/LICENSE
