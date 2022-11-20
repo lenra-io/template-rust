@@ -6,7 +6,7 @@ use crate::data::Counter;
 pub fn counter(data: &Counter, text: String) -> Value {
     json!({
       "type": "flex",
-      "spacing": 2,
+      "spacing": 16,
       "mainAxisAlignment": "spaceEvenly",
       "crossAxisAlignment": "center",
       "children": [

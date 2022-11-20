@@ -6,7 +6,7 @@ pub fn home() -> Value {
     json!({
       "type": "flex",
       "direction": "vertical",
-      "spacing": 4,
+      "spacing": 16,
       "mainAxisAlignment": "spaceEvenly",
       "crossAxisAlignment": "center",
       "children": [

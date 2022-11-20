@@ -8,7 +8,7 @@ pub fn menu() -> Value {
         "fillParent": true,
         "mainAxisAlignment": "spaceBetween",
         "crossAxisAlignment": "center",
-        "padding": Padding { right: 4, ..Default::default() },
+        "padding": Padding { right: 32, ..Default::default() },
         "children": [
             {
               "type": "container",
@@ -53,7 +53,7 @@ pub fn menu() -> Value {
                 })
             }),
         },
-        "padding": padding_symmetric(2, 4),
+        "padding": padding_symmetric(16, 32),
         "child": menu_content,
     })
 }
