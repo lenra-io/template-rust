@@ -48,8 +48,6 @@ pub enum Request {
 fn handle_manifest() -> Value {
     json!({
         "manifest": {
-            "widgets": ["main"],
-            "listeners": [],
             "rootWidget": "main"
         }
     })
