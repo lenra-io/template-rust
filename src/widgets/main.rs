@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 
-pub fn root() -> Value {
+pub fn main() -> Value {
     json!({
       "type": "flex",
       "direction": "vertical",

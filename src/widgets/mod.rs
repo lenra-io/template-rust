@@ -3,14 +3,14 @@ use serde_json::Value;
 
 use crate::{
     data::Counter,
-    widgets::{counter::counter, home::home, loading::loading, menu::menu, root::root},
+    widgets::{counter::counter, home::home, loading::loading, menu::menu, main::main},
 };
 
 mod counter;
 mod home;
 mod loading;
 mod menu;
-mod root;
+mod main;
 
 /** Unknown widget request */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
@@ -25,7 +25,7 @@ pub struct UnknownWidget {
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(tag = "widget", rename_all = "camelCase")]
 pub enum Widget {
-    Root(BaseWidget),
+    Main(BaseWidget),
     Menu(BaseWidget),
     Home(BaseWidget),
     Counter(CounterWidget),
@@ -35,7 +35,7 @@ impl Widget {
     pub fn handle(&self) -> Value {
         log::debug!("Widget: {:?}", self);
         let ret = match self {
-            Widget::Root(_) => root(),
+            Widget::Main(_) => main(),
             Widget::Menu(_) => menu(),
             Widget::Home(_) => home(),
             Widget::Counter(counter_widget) => {

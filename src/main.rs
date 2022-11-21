@@ -48,9 +48,9 @@ pub enum Request {
 fn handle_manifest() -> Value {
     json!({
         "manifest": {
-            "widgets": ["root"],
+            "widgets": ["main"],
             "listeners": [],
-            "rootWidget": "root"
+            "rootWidget": "main"
         }
     })
 }
