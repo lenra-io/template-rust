@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 
-use crate::{listeners::{COUNTER_COLLECTION, CURRENT_USER, GLOBAL_USER}, widgets::CounterWidgetProps};
+use crate::{listeners::{COUNTER_COLLECTION, CURRENT_USER, GLOBAL_USER}, views::CounterViewProps};
 
 pub fn home() -> Value {
     json!({
@@ -11,22 +11,22 @@ pub fn home() -> Value {
       "crossAxisAlignment": "center",
       "children": [
         {
-          "type": "widget",
+          "type": "view",
           "name": "counter",
           "coll": COUNTER_COLLECTION,
           "query": {
             "user": CURRENT_USER
           },
-          "props": CounterWidgetProps { text: "My personnal counter".into() }
+          "props": CounterViewProps { text: "My personnal counter".into() }
         },
         {
-          "type": "widget",
+          "type": "view",
           "name": "counter",
           "coll": COUNTER_COLLECTION,
           "query": {
             "user": GLOBAL_USER
           },
-          "props": CounterWidgetProps { text: "The common counter".into() }
+          "props": CounterViewProps { text: "The common counter".into() }
         }
       ]
     })

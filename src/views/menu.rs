@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 
-use crate::widgets::{Padding, Decoration, BoxShadow, Offset, padding_symmetric};
+use crate::views::{Padding, Decoration, BoxShadow, Offset, padding_symmetric};
 
 pub fn menu() -> Value {
     let menu_content = json!({

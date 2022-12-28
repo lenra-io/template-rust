@@ -2,12 +2,12 @@ use listeners::{Listener, UnknownListener};
 use resources::Resource;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use widgets::{UnknownWidget, Widget};
+use views::{UnknownView, View};
 
 mod data;
 mod listeners;
 mod resources;
-mod widgets;
+mod views;
 
 fn main() {
     env_logger::init();
@@ -15,11 +15,11 @@ fn main() {
     let body = serde_json::from_reader(std::io::stdin());
     if let Ok(request) = body {
         match request {
-            Request::Widget(widget) => print!("{}", widget.handle()),
+            Request::View(view) => print!("{}", view.handle()),
             Request::Listener(listener) => listener.handle(),
-            Request::NotManagedWidget(w) => {
-                log::error!("Not managed widget '{}'", w.widget);
-                panic!("Unknown widget {}", w.widget)
+            Request::NotManagedView(v) => {
+                log::error!("Not managed view '{}'", v.view);
+                panic!("Unknown view {}", v.view)
             }
             Request::NotManagedListener(l) => {
                 log::warn!("Not managed listener '{:?}'", l);
@@ -39,8 +39,8 @@ fn main() {
 pub enum Request {
     Listener(Listener),
     NotManagedListener(UnknownListener),
-    Widget(Widget),
-    NotManagedWidget(UnknownWidget),
+    View(View),
+    NotManagedView(UnknownView),
     Resource(Resource),
     Other(Value),
 }
@@ -48,7 +48,7 @@ pub enum Request {
 fn handle_manifest() -> Value {
     json!({
         "manifest": {
-            "rootWidget": "main"
+            "rootView": "main"
         }
     })
 }

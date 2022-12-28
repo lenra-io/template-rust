@@ -17,7 +17,7 @@ pub struct UnknownListener {
     pub api: Option<Value>,
 }
 
-/** Lenra widget request */
+/** Lenra view request */
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(tag = "action", rename_all = "camelCase")]
 pub enum Listener {
