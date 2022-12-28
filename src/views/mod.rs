@@ -3,7 +3,7 @@ use serde_json::Value;
 
 use crate::{
     data::Counter,
-    widgets::{counter::counter, home::home, loading::loading, menu::menu, main::main},
+    views::{counter::counter, home::home, loading::loading, menu::menu, main::main},
 };
 
 mod counter;
@@ -12,36 +12,36 @@ mod loading;
 mod menu;
 mod main;
 
-/** Unknown widget request */
+/** Unknown view request */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
-pub struct UnknownWidget {
-    pub widget: String,
+pub struct UnknownView {
+    pub view: String,
     pub data: Option<Value>,
     pub props: Option<Value>,
     pub context: Option<Context>,
 }
 
-/** Lenra widget request */
+/** Lenra view request */
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(tag = "widget", rename_all = "camelCase")]
-pub enum Widget {
-    Main(BaseWidget),
-    Menu(BaseWidget),
-    Home(BaseWidget),
-    Counter(CounterWidget),
+#[serde(tag = "view", rename_all = "camelCase")]
+pub enum View {
+    Main(BaseView),
+    Menu(BaseView),
+    Home(BaseView),
+    Counter(CounterView),
 }
 
-impl Widget {
+impl View {
     pub fn handle(&self) -> Value {
-        log::debug!("Widget: {:?}", self);
+        log::debug!("View: {:?}", self);
         let ret = match self {
-            Widget::Main(_) => main(),
-            Widget::Menu(_) => menu(),
-            Widget::Home(_) => home(),
-            Widget::Counter(counter_widget) => {
-                let counter_option = counter_widget.data.get(0);
+            View::Main(_) => main(),
+            View::Menu(_) => menu(),
+            View::Home(_) => home(),
+            View::Counter(counter_view) => {
+                let counter_option = counter_view.data.get(0);
                 if let Some(c) = counter_option {
-                    return counter(c, counter_widget.props.text.clone());
+                    return counter(c, counter_view.props.text.clone());
                 }
 
                 loading()
@@ -52,9 +52,9 @@ impl Widget {
     }
 }
 
-/** Base widget body */
+/** Base view body */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
-pub struct BaseWidget {
+pub struct BaseView {
     pub data: Option<Value>,
     pub props: Option<Value>,
     pub context: Option<Context>,
@@ -74,18 +74,18 @@ pub struct ScreenSize {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 #[serde(default)]
-pub struct CounterWidget {
+pub struct CounterView {
     pub data: Vec<Counter>,
-    pub props: CounterWidgetProps,
+    pub props: CounterViewProps,
     pub context: Option<Context>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
-pub struct CounterWidgetProps {
+pub struct CounterViewProps {
     text: String,
 }
 
-/** Lenra widget padding */
+/** Lenra view padding */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 pub struct Padding {
     pub top: u16,

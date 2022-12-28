@@ -13,7 +13,7 @@ macro_rules! resource {
 
 pub const RESOURCE_MAP: [(&str, &[u8]); 1] = [resource!("logo.png")];
 
-/** Lenra widget request */
+/** Lenra view request */
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Resource {
     pub resource: String,
