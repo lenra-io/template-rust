@@ -1,6 +1,6 @@
 use serde_json::{json, Value};
 
-use crate::views::{Padding, Decoration, BoxShadow, Offset, padding_symmetric};
+use crate::views::{padding_symmetric, BoxShadow, Decoration, Offset, Padding};
 
 pub fn menu() -> Value {
     let menu_content = json!({
@@ -8,7 +8,7 @@ pub fn menu() -> Value {
         "fillParent": true,
         "mainAxisAlignment": "spaceBetween",
         "crossAxisAlignment": "center",
-        "padding": Padding { right: 32, ..Default::default() },
+        "padding": { "right": 32 },
         "children": [
             {
               "type": "container",
