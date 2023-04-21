@@ -142,6 +142,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "lenra-app"
+version = "0.0.0"
+dependencies = [
+ "env_logger",
+ "log",
+ "serde",
+ "serde_json",
+ "ureq",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.132"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -320,6 +331,7 @@ name = "template-rust"
 version = "0.0.0"
 dependencies = [
  "env_logger",
+ "lenra-app",
  "log",
  "serde",
  "serde_json",
