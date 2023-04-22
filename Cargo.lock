@@ -144,6 +144,7 @@ dependencies = [
 [[package]]
 name = "lenra-app"
 version = "0.0.0"
+source = "git+https://github.com/lenra-io/app-lib-rust.git?branch=init-project#e0f297cb92f27adb38a5aa2afdde6c7f2b5e6724"
 dependencies = [
  "env_logger",
  "log",

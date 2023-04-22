@@ -1,5 +1,7 @@
-use lenra_app::{manifest::Manifest, LenraApp, resource::map_resources};
+use lenra_app::{manifest::Manifest, resource::map_resources, LenraApp};
+use listeners::get_listeners;
 use resources::RESOURCE_MAP;
+use views::get_views;
 mod data;
 mod listeners;
 mod resources;
@@ -10,8 +12,8 @@ fn main() {
         manifest: Manifest {
             root_view: "main".into(),
         },
-        views: vec![],
-        listeners: vec![],
+        views: get_views(),
+        listeners: get_listeners(),
         resources: map_resources(RESOURCE_MAP),
         ..Default::default()
     };

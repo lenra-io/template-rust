@@ -1,8 +1,5 @@
+use lenra_app::api::Doc;
 use serde::{Deserialize, Serialize};
-
-use self::service::Doc;
-
-pub mod service;
 
 /** Counter data */
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default, Clone)]
