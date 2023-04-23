@@ -15,7 +15,6 @@ fn main() {
         views: get_views(),
         listeners: get_listeners(),
         resources: map_resources(RESOURCE_MAP),
-        ..Default::default()
     };
 
     app.run().unwrap();

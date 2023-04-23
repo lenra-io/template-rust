@@ -5,7 +5,7 @@ use lenra_app::{
 };
 // use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::Value;
 
 use crate::data::Counter;
 
@@ -17,11 +17,11 @@ pub fn get_listeners() -> Vec<Listener> {
     vec![
         Listener::new(
             SystemEvents::OnEnvStart.to_str(),
-            |params: ListenerParams<Value, Value>| create_counter(&params.api, GLOBAL_USER),
+            |params: ListenerParams| create_counter(&params.api, GLOBAL_USER),
         ),
         Listener::new(
             SystemEvents::OnUserFirstJoin.to_str(),
-            |params: ListenerParams<Value, Value>| create_counter(&params.api, CURRENT_USER),
+            |params: ListenerParams| create_counter(&params.api, CURRENT_USER),
         ),
         Listener::new("increment", increment),
     ]
@@ -42,24 +42,14 @@ fn increment(params: ListenerParams<IncrementProps, Value>) -> Result<()> {
     Ok(())
 }
 
-// impl Listener {
-//     pub fn handle(&self) {
-//         log::debug!("Listener: {:?}", self);
-//         match self {
-//             Listener::Increment(inc) => inc.handle(),
-//             Listener::OnEnvStart(listener) => create_counter(&listener.api, GLOBAL_USER),
-//             Listener::OnUserFirstJoin(listener) => create_counter(&listener.api, CURRENT_USER),
-//         }
-//     }
-// }
-
 fn create_counter(api: &Api, user: &str) -> Result<()> {
     api.data.create_doc(
         COUNTER_COLLECTION,
-        json!({
-            "count": 0,
-            "user": user,
-        }),
+        Counter {
+            count: 0,
+            user: user.into(),
+            ..Default::default()
+        },
     )?;
     Ok(())
 }

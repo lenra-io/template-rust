@@ -4,7 +4,7 @@ use lenra_app::{
 };
 use serde_json::{json, Value};
 
-pub fn menu(_params: ViewParams<Value, Value>) -> Result<Value> {
+pub fn menu(_params: ViewParams) -> Result<Value> {
     let menu_content = json!({
         "type": "flex",
         "fillParent": true,

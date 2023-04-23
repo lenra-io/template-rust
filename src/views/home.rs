@@ -6,7 +6,7 @@ use crate::{
     views::counter::CounterViewProps,
 };
 
-pub fn home(_params: ViewParams<Value, Value>) -> Result<Value> {
+pub fn home(_params: ViewParams) -> Result<Value> {
     Ok(json!({
       "type": "flex",
       "direction": "vertical",
