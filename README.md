@@ -46,14 +46,14 @@ Installation instructions can be found here https://github.com/lenra-io/lenra_cl
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-To run the Rust template you first need to build the application.
+To create a new app from this template use `lenra new` command:
 ```console
-lenra build
+lenra new rust my_rust_app
 ```
 
-Then you can start it.
+Then you can build and start it with the `lenra dev` command:
 ```console
-lenra start
+lenra dev
 ```
 
 You can then access the application by opening [`localhost:4000`](http://localhost:4000) on your web browser. 
