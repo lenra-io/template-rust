@@ -1,9 +1,13 @@
+use lenra_app::{view::ViewParams, Result};
 use serde_json::{json, Value};
 
-use crate::{listeners::{COUNTER_COLLECTION, CURRENT_USER, GLOBAL_USER}, views::CounterViewProps};
+use crate::{
+    listeners::{COUNTER_COLLECTION, CURRENT_USER, GLOBAL_USER},
+    views::counter::CounterViewProps,
+};
 
-pub fn home() -> Value {
-    json!({
+pub fn home(_params: ViewParams) -> Result<Value> {
+    Ok(json!({
       "type": "flex",
       "direction": "vertical",
       "spacing": 16,
@@ -29,5 +33,5 @@ pub fn home() -> Value {
           "props": CounterViewProps { text: "The common counter".into() }
         }
       ]
-    })
+    }))
 }

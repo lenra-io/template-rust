@@ -1,8 +1,10 @@
+use lenra_app::{
+    view::{BoxShadow, Decoration, Offset, Padding, ViewParams},
+    Result,
+};
 use serde_json::{json, Value};
 
-use crate::views::{padding_symmetric, BoxShadow, Decoration, Offset};
-
-pub fn menu() -> Value {
+pub fn menu(_params: ViewParams) -> Result<Value> {
     let menu_content = json!({
         "type": "flex",
         "fillParent": true,
@@ -40,7 +42,7 @@ pub fn menu() -> Value {
             }
         ]
     });
-    json!({
+    Ok(json!({
         "type": "container",
         "decoration": Decoration {
             color: Some(0xFFFFFFFF),
@@ -53,7 +55,7 @@ pub fn menu() -> Value {
                 })
             }),
         },
-        "padding": padding_symmetric(16, 32),
+        "padding": Padding::symmetric(16, 32),
         "child": menu_content,
-    })
+    }))
 }

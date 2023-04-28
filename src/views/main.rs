@@ -1,7 +1,8 @@
+use lenra_app::{view::ViewParams, Result};
 use serde_json::{json, Value};
 
-pub fn main() -> Value {
-    json!({
+pub fn main(_params: ViewParams) -> Result<Value> {
+    Ok(json!({
       "type": "flex",
       "direction": "vertical",
       "scroll": true,
@@ -17,5 +18,5 @@ pub fn main() -> Value {
           "name": "home"
         }
       ]
-    })
+    }))
 }
