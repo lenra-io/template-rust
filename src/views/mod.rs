@@ -1,17 +1,11 @@
-use lenra_app::{view::View, Handler};
+use lenra_app::view::View;
 
-use crate::views::{counter::counter, home::home, main::main, menu::menu};
-
-mod counter;
-mod home;
-mod main;
-mod menu;
+mod json;
+mod lenra;
 
 pub fn get_views() -> Vec<View> {
-    vec![
-        View::new("main", main),
-        View::new("home", home),
-        View::new("menu", menu),
-        View::new("counter", counter),
-    ]
+    let mut views: Vec<View> = vec![];
+    views.append(&mut json::get_views());
+    views.append(&mut lenra::get_views());
+    views
 }
