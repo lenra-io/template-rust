@@ -48,7 +48,7 @@ Installation instructions can be found here https://github.com/lenra-io/lenra_cl
 
 To create a new app from this template use `lenra new` command:
 ```console
-lenra new rust my_rust_app
+lenra new rust --path my_rust_app
 ```
 
 Then you can build and start it with the `lenra dev` command:
